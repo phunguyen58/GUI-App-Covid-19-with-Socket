@@ -66,7 +66,7 @@ def getData():
     
 
 # schedule.every().hour.at(":00").do(geeks)
-schedule.every().minute.at(":30").do(getData)
+schedule.every().minute.at(":00").do(getData)
 
 while True:
     schedule.run_pending()
