@@ -3,8 +3,8 @@ import schedule
 import pandas as pd #can tai
 from bs4 import BeautifulSoup #can tai
 from unidecode import unidecode #can tai pip install unicode
-import schedule
 import time
+from datetime import datetime
 
 global_url = "https://coronavirus-19-api.herokuapp.com/all"
 all_country_url = "https://coronavirus-19-api.herokuapp.com/countries"
@@ -55,22 +55,23 @@ def getDataFromWikiURL():
     vietnam_info_file.write(vietnam_info_string)
     vietnam_info_file.close()
 
+def printTimeUpdateDatabase():
+    date_time = datetime.now().strftime("%d/%m/%Y %H:%M:%S")
+    print("Database updated at: ", date_time)
+
 def getData():
-    # t = time()
-    # now_time = ctime(t)
-    # print("Database updated at: ", now_time)
-    print("Updated database!")
+    printTimeUpdateDatabase()
     getDataFromGlobalURL()
     getDataFromAllCountryURL()
     getDataFromWikiURL()
     
 
 # schedule.every().hour.at(":00").do(geeks)
-schedule.every().minute.at(":00").do(getData)
+# schedule.every().minute.at(":00").do(getData)
 
-while True:
-    schedule.run_pending()
-    time.sleep(1)
+# while True:
+#     schedule.run_pending()
+#     time.sleep(1)
 
 #global information
 
