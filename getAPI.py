@@ -32,8 +32,7 @@ def getDataFromWikiURL():
     header_tags = required_table.find_all('th')
     filtered_header_tags = [header_tag for header_tag in header_tags]
     headers = [header.text.strip() for header in header_tags]
-    rows = {}
-    rows['province'] = []
+    rows = []
     data_rows = required_table.find_all('tr')
 
     for row in data_rows:
@@ -41,7 +40,7 @@ def getDataFromWikiURL():
         beautified_value = [dp.text.strip() for dp in value]
         if len(beautified_value) < 6:
             continue
-        rows['province'].append({
+        rows.append({
             'nameProvince': unidecode(beautified_value[0]), # chuyen tu tieng viet co dau thanh ko dau
             'cases': beautified_value[1],
             'inProgress': beautified_value[2],
