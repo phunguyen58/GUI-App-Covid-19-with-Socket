@@ -36,11 +36,13 @@ def butConnect_Click():
 
 btnConnect = Button(window, text = "Connect", fg = "black", bg = BUTTON_COLOR, font=("Arial", 9), command = butConnect_Click)
 btnConnect.grid(row = 2, column = 1, pady = 10)
-################################
-### ham phu tro
+###############################
 def exit(window_name):
     window_name.destroy()
 
+def doExit():
+    clientRef.doExit()
+    window.destroy()
 ################################
 #function for form login
 def formLogin_btnLogin_click():
@@ -55,8 +57,7 @@ def formLogin_btnLogin_click():
         messagebox.showinfo("", "Please input your password")
         return
     #send data toi server va tra ve thong bao neu ko thanh cong
-    check_login = True
-    clientRef.doLogin(username, password, check_login)
+    check_login = clientRef.doLogin(username, password)
     if check_login == True:
         formLogin.withdraw()
         FormUser()
@@ -80,8 +81,7 @@ def formSignup_btnSignup_click():
         messagebox.showinfo("", "Please input your password")
         return
     #send data toi server va tra ve thong bao neu thanh cong
-    check_signup = True
-    clientRef.doSingup(username, password, check_signup)
+    check_signup = clientRef.doSingup(username, password)
     if check_signup == True:
         messagebox.showinfo("", "Created account done!")
     else:
@@ -105,10 +105,10 @@ def FormSignup():
     global formSignup_username
     formSignup_username = Entry(formSignup, width = 36, textvariable = text_username)
     global formSignup_pass
-    formSignup_pass = Entry(formSignup, width = 36, textvariable = text_pass)
+    formSignup_pass = Entry(formSignup, show = "*", width = 36, textvariable = text_pass)
     formSignup_btnSignup = Button(formSignup, text = "Create account", width = 12, fg = "black", bg = BUTTON_COLOR, font=("Arial", 9), command = formSignup_btnSignup_click)
     formSignup_btnLogin = Button(formSignup, text = "Return to Log in", width = 12, fg = "black", bg = BUTTON_COLOR, font=("Arial", 9), command = formSignup_btnLoginBack_click)
-    formSignup_btnOut = Button(formSignup, text = "Exit", width = 6, fg = "black", bg = BUTTON_COLOR, font=("Arial", 9), command = lambda: exit(window))
+    formSignup_btnOut = Button(formSignup, text = "Exit", width = 6, fg = "black", bg = BUTTON_COLOR, font=("Arial", 9), command = doExit)
     #place of content in form
     formSignup_header.grid(row = 0, column = 1, pady = 15)
     formSignup_username.grid(row = 1, column = 1, padx = 100)
@@ -135,10 +135,10 @@ def FormLogin():
     global formLogin_username
     formLogin_username = Entry(formLogin, width = 36, textvariable = text_username)
     global formLogin_pass
-    formLogin_pass = Entry(formLogin, width = 36, textvariable = text_pass)
+    formLogin_pass = Entry(formLogin, show = "*", width = 36, textvariable = text_pass)
     formLogin_btnLogin = Button(formLogin, text = "Log in", width = 6, fg = "black", bg = BUTTON_COLOR, font=("Arial", 9), command = formLogin_btnLogin_click)
     formLogin_btnSignup = Button(formLogin, text = "Sign up", width = 6, fg = "black", bg = BUTTON_COLOR, font=("Arial", 9), command = formLogin_btnSignup_click)
-    formLogin_btnOut = Button(formLogin, text = "Exit", width = 6, fg = "black", bg = BUTTON_COLOR, font=("Arial", 9), command = lambda: exit(window))
+    formLogin_btnOut = Button(formLogin, text = "Exit", width = 6, fg = "black", bg = BUTTON_COLOR, font=("Arial", 9), command = doExit)
     #place of content in form
     formLogin_header.grid(row = 0, column = 1, pady = 15)
     formLogin_username.grid(row = 1, column = 1, padx = 100)
@@ -189,7 +189,7 @@ def FormUser():
     textInfo.set("Country:  Vietnam\nCases:  189066\nCases today:  4009\nDeaths:  2720\nToday deaths:  0\nRecovered:  58040\nActive:  128306\nCritical:  0\nCases per one million:  1923\nDeaths per one million:  28\nTotal test:  11890084\nTest per one million:  120963")
     formUser_btnShowGuide = Button(formUser, text = "Guide", width = 6, fg = "black", bg = BUTTON_COLOR, font=("Arial", 9), command = formUser_btnShowGuide_click)
     formUser_showInfo = Label(formUser, textvariable = textInfo, fg = "black", font = ("Arial", 12), bg = "#EEE5DE", height = 13, width = 50, anchor = N)
-    formUser_Out = Button(formUser, text = "Exit", width = 6, fg = "black", bg = BUTTON_COLOR, font=("Arial", 9), command = lambda: exit(window))
+    formUser_Out = Button(formUser, text = "Exit", width = 6, fg = "black", bg = BUTTON_COLOR, font=("Arial", 9), command = doExit)
     #place content in form user window
     formUser_header.grid(row = 0, column = 1, pady = 20, padx = 120)
     formUser_search.grid(row = 1, column = 1, padx = 60)
@@ -200,6 +200,10 @@ def FormUser():
     #out window
     formUser.protocol("WM_DELETE_WINDOW", lambda: exit(window))
 
+########################
+def exitGuide(window_name):
+    window_name.destroy()
+
 ##########################################
 def FormGuide():
     formGuide = Toplevel()
@@ -208,7 +212,7 @@ def FormGuide():
     #content
     formGuide_header = Label(formGuide, text = "Search Guide", fg = "#9966FF", font = ("Arial", 20))
     formGuide_showText = Label(formGuide, fg = "black", font = ("Arial", 13), bg = "#EEE5DE", text = "Search country info whole of the world\nInput: World or Vietnam or VN\nThe acronym country name base on ISO2\nSearch province info in Vietnam\nInput: VN/province name\n Example: VN/tphcm or VN/Ha Noi\nThe arcnonym provinced name in Vietnam base on\n[Wiki] Bản mẫu:Ký kiệu quy ước các tỉnh thành Việt Nam\n")
-    formGuide_Out = Button(formGuide, text = "Exit to search", width = 10, fg = "black", bg = BUTTON_COLOR, font=("Arial", 9), command = lambda: exit(formGuide))
+    formGuide_Out = Button(formGuide, text = "Exit to search", width = 10, fg = "black", bg = BUTTON_COLOR, font=("Arial", 9), command = lambda: exitGuide(formGuide))
     #place
     formGuide_header.grid(row = 0, column = 1, pady = 20, padx = 150)
     formGuide_showText.grid(row = 1, column = 1, pady = 10)

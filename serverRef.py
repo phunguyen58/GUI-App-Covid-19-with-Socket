@@ -11,6 +11,7 @@ from tkinter import *
 from tkinter import messagebox
 import getAPI#file local
 import getDatabase#file local
+import tkinter.scrolledtext as tkscrolled
 
 #define
 BUTTON_COLOR = "#EEE8AA"
@@ -29,14 +30,23 @@ checkShutdown = 0
 def btnOut_click():
     global checkShutdown
     checkShutdown = 1
+    for client in my_clients:
+        client.send(b'quit')
+    sys.exit(0)
     sys.exit(0)
     
 def btnRenew_click():
-    print("Renewed!")
+    renew_show = ""
+    on_active = str(threading.activeCount() - 4)
+    renew_show = "User activing: " + on_active + "\n"
+    renew_show += '\n'.join(map(str, my_clients))
+    textShowUser.delete(1.0, END)
+    textShowUser.insert(END, renew_show)
+    print(renew_show)
 
 def getAPIdata():
     getAPI.getData()
-    schedule.every(30).seconds.do(getAPI.getData)
+    schedule.every(60).minutes.do(getAPI.getData)
     while True:
         if checkShutdown == 1:
             break
@@ -141,6 +151,9 @@ def handle_client(conn, addr):
                 print(country_info)
                 conn.send(country_info.encode())
         elif data==b'exit':
+            for i in my_clients:
+                if i == addr:
+                    my_clients.remove(i)
             break
     conn.close()
     sys.exit(0)
@@ -151,7 +164,7 @@ def clearNameInVN(name_search):
             return "Thua Thien - Hue"
         elif name_search.lower() == "ba ria vung tau" or name_search.lower() == "vung tau" or name_search.lower() == "ba ria":
             return "Ba Ria - Vung Tau"
-        elif name_search.lower() == "tp hcm" or name_search.lower() == "tp.hcm" or name_search.lower() == "tphcm":
+        elif name_search.lower() == "tp hcm" or name_search.lower() == "tp.hcm" or name_search.lower() == "tphcm" or name_search.lower() == "thanh pho ho chi minh":
             return "TP. Ho Chi Minh"
         else:
             return name_search
@@ -163,11 +176,15 @@ def showUIServer():
         global window
         window = Tk()
         window.title('Server')
-        window.geometry('400x450')
+        window.geometry('396x460')
         #content UI in server
         header = Label(window, text = "SERVER MANAGER", fg=HEADER_COLOR, font=("Arial", 18))
         btnRenew = Button(window, text = "Renew", width = 6, fg = "black", bg = BUTTON_COLOR, font=("Arial", 9), command = btnRenew_click)
-        textShowUser = Text(window, font=("Arial", 9), height = 20, width = 50)
+        global textShowUser
+        textShowUser = tkscrolled.ScrolledText(window, font=("Arial", 10), bg = "white", height = 20, width = 50, wrap='word')
+        on_active = str(threading.activeCount() - 4)
+        active_user = "User activing: " + on_active + "\n"
+        textShowUser.insert(END, active_user + "None user")
         btnOut = Button(window, text = "Shut down server", width = 15, fg = "black", bg = BUTTON_COLOR, font=("Arial", 9), command = btnOut_click)
         #place content UI in server
         header.grid(row = 0, column = 1, pady = 10, padx = 85)
@@ -185,15 +202,18 @@ def runServer():
 
     thread1 = threading.Thread(target=showUIServer)
     thread1.start()
+    global my_clients
+    my_clients=[]
+    # i = 0
     while True:
-        if checkShutdown == 1:
-            break
+        # if i != 0:
+        #     if threading.activeCount() - 4 == 0:
+        #         break
         conn, addr = server.accept()
+        # i+=1
+        my_clients += [addr]
         thread2 = threading.Thread(target=handle_client, args=(conn, addr))
         thread2.start()
-        print(f"[ACTIVE CONNECTIONS] {threading.activeCount() - 4}")
-        if threading.activeCount() - 4 == 0:
-            break
 
     thread1.join()
     thread2.join()

@@ -15,7 +15,7 @@ def doConnect(host_IP, test):
     except:
         test = False
 
-def doLogin(username, password, check_login):
+def doLogin(username, password):
     client.send(b'login')
     check=client.recv(1024)
     if check ==b'fail':
@@ -34,9 +34,10 @@ def doLogin(username, password, check_login):
         check_login = True
     elif result==b'no':
         print("Dang nhap that bai")
-        check_login = False            
+        check_login = False
+    return check_login            
 
-def doSingup(username, password, check_signup):
+def doSingup(username, password):
     client.send(b'signup')
     client.recv(1024)
     client.send(username.encode())
@@ -51,6 +52,7 @@ def doSingup(username, password, check_signup):
     elif result == b'no':
         print('Dang ki khong thanh cong')
         check_signup = False
+    return check_signup
 
 def clearName(text):
     text_clear = ""
@@ -89,3 +91,6 @@ def doSearch(search_text):
         conutry_info = country_info1.decode(FORMAT)
         return conutry_info
 
+def doExit():
+    print("Send exit")
+    client.send(b'exit')
