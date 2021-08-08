@@ -2,15 +2,15 @@ import tkinter as tk
 from tkinter import *
 from tkinter import messagebox
 import threading    
-import serverRef
+import serverRef#file local
 
-def showGUIServer():
-    serverRef.showServerUI()
+def runServerGUI():
+    serverRef.runServer()
 
 def readData():
     serverRef.getAPIdata()
 
-t1 = threading.Thread(target=showGUIServer)
+t1 = threading.Thread(target=runServerGUI)
 t2 = threading.Thread(target=readData)
 
 t1.start()

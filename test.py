@@ -1,5 +1,25 @@
 import json
 
+def readDataInVN(province_name):
+    with open("dataVN.json") as f_inVN:
+        province_data = json.load(f_inVN)
+    province_info = "None"
+    for province in province_data:
+        if province_name == province['nameProvince']:
+            province_info = "Province/City: "
+            province_info += str(province['nameProvince']) + "\n"
+            province_info += "Cases: "
+            province_info += str(province['cases']) + "\n"
+            province_info += "In progress treatment: "
+            province_info += str(province['inProgress']) + "\n"
+            province_info += "Another: "
+            province_info += str(province['another'])+ "\n"
+            province_info += "Recovered: "
+            province_info += str(province['recovered']) + "\n"
+            province_info += "Deaths: "
+            province_info += str(province['deaths'])
+    return province_info
+
 def readDataByCountry(country_name):
     with open("dataAllCountry.json") as f_country:
         all_country_data = json.load(f_country)
@@ -32,22 +52,6 @@ def readDataByCountry(country_name):
             country_info += str(country['testsPerOneMillion'])
     return country_info
 
-def readDataInVN(province_name):
-    with open("dataVN.json") as f_inVN:
-        province_data = json.load(f_inVN)
-    province_info = "None"
-    for province in province_data:
-        if province_name.title() == province['nameProvince']:
-            province_info = "Province/City: "
-            province_info += str(province['nameProvince']) + "\n"
-            province_info += "Cases: "
-            province_info += str(province['cases']) + "\n"
-            province_info += "In progress treatment: "
-            province_info += str(province['inProgress']) + "\n"
-            province_info += "Another: "
-            province_info += str(province['another'])+ "\n"
-            province_info += "Recovered: "
-            province_info += str(province['recovered']) + "\n"
-            province_info += "Deaths: "
-            province_info += str(province['deaths'])
-    return province_info
+if __name__ == "__main__":
+	res = readDataByCountry("usa")
+	print(res)

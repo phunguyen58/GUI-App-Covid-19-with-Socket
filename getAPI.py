@@ -6,16 +6,8 @@ from unidecode import unidecode #can tai pip install unicode
 import time
 from datetime import datetime
 
-global_url = "https://coronavirus-19-api.herokuapp.com/all"
 all_country_url = "https://coronavirus-19-api.herokuapp.com/countries"
 wiki_url = "https://vi.wikipedia.org/wiki/B%E1%BA%A3n_m%E1%BA%ABu:D%E1%BB%AF_li%E1%BB%87u_%C4%91%E1%BA%A1i_d%E1%BB%8Bch_COVID-19/S%E1%BB%91_ca_nhi%E1%BB%85m_theo_t%E1%BB%89nh_th%C3%A0nh_t%E1%BA%A1i_Vi%E1%BB%87t_Nam#cite_note-1"
-
-def getDataFromGlobalURL():
-    global_info = json.loads(requests.get(global_url).text)
-    global_info_string = json.dumps(global_info, sort_keys=True)
-    global_info_file = open('dataGlobal.json', 'w', encoding="utf-8")
-    global_info_file.write(global_info_string)
-    global_info_file.close()
 
 def getDataFromAllCountryURL():
     all_country_info = json.loads(requests.get(all_country_url).text)
@@ -41,7 +33,7 @@ def getDataFromWikiURL():
         if len(beautified_value) < 6:
             continue
         rows.append({
-            'nameProvince': unidecode(beautified_value[0]), # chuyen tu tieng viet co dau thanh ko dau
+            'nameProvince': unidecode(beautified_value[0]).title(), # chuyen tu tieng viet co dau thanh ko dau va viet hoa chu dau
             'cases': beautified_value[1],
             'inProgress': beautified_value[2],
             'another': beautified_value[3],
@@ -60,7 +52,6 @@ def printTimeUpdateDatabase():
 
 def getData():
     printTimeUpdateDatabase()
-    getDataFromGlobalURL()
     getDataFromAllCountryURL()
     getDataFromWikiURL()
     
