@@ -141,14 +141,10 @@ def handle_client(conn, addr):
             if name_search[0:3].lower() == "vn/":
                 name_search_VN = name_search.replace(name_search[0:3],"")
                 name_clear = clearNameInVN(name_search_VN)
-                print(name_clear)
                 province_info = getDatabase.readDataInVN(name_clear)
-                print(province_info)
                 conn.send(province_info.encode())
             else:
-                print(name_search)
                 country_info = getDatabase.readDataByCountry(name_search)
-                print(country_info)
                 conn.send(country_info.encode())
         elif data==b'exit':
             for i in my_clients:
@@ -164,12 +160,12 @@ def clearNameInVN(name_search):
             return "Thua Thien - Hue"
         elif name_search.lower() == "ba ria vung tau" or name_search.lower() == "vung tau" or name_search.lower() == "ba ria":
             return "Ba Ria - Vung Tau"
-        elif name_search.lower() == "tp hcm" or name_search.lower() == "tp.hcm" or name_search.lower() == "tphcm" or name_search.lower() == "thanh pho ho chi minh":
+        elif name_search.lower().replace(".", "").replace(" ", "") == "tphcm" or name_search.lower() == "thanh pho ho chi minh" or name_search.lower() == "tp ho chi minh":
             return "TP. Ho Chi Minh"
         else:
             return name_search
     else:
-        pass
+        return "None"
 
 
 def showUIServer():

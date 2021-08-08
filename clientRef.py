@@ -56,7 +56,7 @@ def doSingup(username, password):
 
 def clearName(text):
     text_clear = ""
-    if len(text) == 2 and text.lower() != "vn" and text.lower() != "us" and text.lower() != "uk":
+    if len(text) == 2 and text.lower() != "vn" and text.lower() != "us" and text.lower() != "uk" and text.lower() != "kr":
         text_clear = pycountry.countries.get(alpha_2 = text).name
     else:
         if text.lower() == "viet nam" or text.lower() == "vn":
@@ -65,7 +65,7 @@ def clearName(text):
             text_clear = "USA"
         elif text.lower() == "uk" or text.lower() == "united of kingdom":
             text_clear = "UK"
-        elif text.lower() == "south korea" or text.lower() == "korea":
+        elif text.lower() == "south korea" or text.lower() == "korea" or text.lower() == "kr":
             text_clear = "S. Korea"
         elif text.lower() == "congo":
             text_clear = "DRC"
@@ -81,6 +81,7 @@ def doSearch(search_text):
         client.send(search_text.encode())
         province_info1 = client.recv(1024)
         province_info = province_info1.decode(FORMAT)
+        print(province_info)
         return province_info
     else:
         print("Search whole of the world")
@@ -88,8 +89,9 @@ def doSearch(search_text):
         print(search_text_clear)
         client.send(search_text_clear.encode())
         country_info1 = client.recv(1024)
-        conutry_info = country_info1.decode(FORMAT)
-        return conutry_info
+        country_info = country_info1.decode(FORMAT)
+        print(country_info)
+        return country_info
 
 def doExit():
     print("Send exit")
