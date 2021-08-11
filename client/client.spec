@@ -5,7 +5,7 @@ block_cipher = None
 
 
 a = Analysis(['client.py'],
-             pathex=['G:\\MMT COVID\\client'],
+             pathex=['G:\\Nop bai MMT covid\\3_20127278_20127480\\Source\\client'],
              binaries=[],
              datas=[],
              hiddenimports=[],

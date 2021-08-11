@@ -25,9 +25,8 @@ txtIP = Entry(window, width = 50, textvariable = a)
 txtIP.grid(row = 1, column = 1, padx = 46)
 
 def butConnect_Click():
-    test = True
     host_IP = txtIP.get()
-    clientRef.doConnect(host_IP, test)
+    test = clientRef.doConnect(host_IP)
     if test == False: 
         messagebox.showinfo("", "Can't connect to server!")
     elif test == True:
@@ -38,8 +37,9 @@ btnConnect = Button(window, text = "Connect", fg = "black", bg = BUTTON_COLOR, f
 btnConnect.grid(row = 2, column = 1, pady = 10)
 ###############################
 def exit(window_name):
+    clientRef.doExit()
     window_name.destroy()
-
+################################
 def doExit():
     clientRef.doExit()
     window.destroy()

@@ -5,15 +5,19 @@ PORT = 5566
 SIZE = 1024
 FORMAT = "utf-8"
 
-def doConnect(host_IP, test):
+def doConnect(host_IP):
+    test = True
     try:
         global client
         client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         client.connect((host_IP,PORT))
-        print(f"[CONNECTED] Client connected to server at {HOST}:{PORT}")
-        test = True
+        print(f"[CONNECTED] Client connected to server at {host_IP}:{PORT}")
+        print(test)
+        return test
     except:
         test = False
+        print(test)
+        return test
 
 def doLogin(username, password):
     client.send(b'login')
